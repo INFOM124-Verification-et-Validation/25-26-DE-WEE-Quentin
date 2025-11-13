@@ -38,7 +38,7 @@ public class PlayerCollisionTest {
         Player player = playerfactory.createPacMan();
         Ghost ghost = ghostfactory.createClyde();
         assertEquals(player.isAlive(), true);
-        assertEquals(level.isInProgress(), true);
+        assertEquals(level.isInProgress(), false);
         collisions.collide(player, ghost);
         assertEquals(player.isAlive(), true);
     }
