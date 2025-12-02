@@ -1,76 +1,58 @@
+import java.util.ArrayList;
+import java.util.List;
 
 public class TennisGame1 implements TennisGame {
     
-    private int m_score1 = 0;
-    private int m_score2 = 0;
-    private String player1Name;
-    private String player2Name;
+    private final Player player1;
+    private final Player player2;
+    ArrayList<String> scores = new ArrayList<>(List.of("Love","Fifteen","Thirty","Forty", "Win"));
 
     public TennisGame1(String player1Name, String player2Name) {
-        this.player1Name = player1Name;
-        this.player2Name = player2Name;
+        this.player1 = new Player(player1Name);
+        this.player2 = new Player(player2Name);
     }
 
     public void wonPoint(String playerName) {
-        if (playerName == "player1")
-            m_score1 += 1;
-        else
-            m_score2 += 1;
+        if (playerName.equals(player1.getName())) {
+            if (player2.getScore().equals("Avg")) {
+                player2.setScore("Forty");
+            }
+            else {
+                player1.incrementScore(scores);
+            }
+        } else {
+            if (player1.getScore().equals("Avg")) {
+                player1.setScore("Forty");
+            }
+            else {
+                player2.incrementScore(scores);
+            }
+        }
+        if (player1.getScore().equals("Forty") && player2.getScore().equals("Forty")) {
+            scores =  new ArrayList<>(List.of("Forty", "Avg", "Win"));
+        }
     }
 
     public String getScore() {
-        String score = "";
-        int tempScore=0;
-        if (m_score1==m_score2)
-        {
-            switch (m_score1)
-            {
-                case 0:
-                        score = "Love-All";
-                    break;
-                case 1:
-                        score = "Fifteen-All";
-                    break;
-                case 2:
-                        score = "Thirty-All";
-                    break;
-                default:
-                        score = "Deuce";
-                    break;
-                
+        if (player1.getScore().equals(player2.getScore())) {
+            if (player1.getScore().equals("Forty")) {
+                return "Deuce";
+            } else {
+                return player1.getScore() + "-All";
             }
         }
-        else if (m_score1>=4 || m_score2>=4)
-        {
-            int minusResult = m_score1-m_score2;
-            if (minusResult==1) score ="Advantage player1";
-            else if (minusResult ==-1) score ="Advantage player2";
-            else if (minusResult>=2) score = "Win for player1";
-            else score ="Win for player2";
+        else if (player1.getScore().equals("Win")) {
+            return "Win for player1";
+        } else if (player2.getScore().equals("Win")) {
+            return "Win for player2";
         }
-        else
-        {
-            for (int i=1; i<3; i++)
-            {
-                if (i==1) tempScore = m_score1;
-                else { score+="-"; tempScore = m_score2;}
-                switch(tempScore)
-                {
-                    case 0:
-                        score+="Love";
-                        break;
-                    case 1:
-                        score+="Fifteen";
-                        break;
-                    case 2:
-                        score+="Thirty";
-                        break;
-                    case 3:
-                        score+="Forty";
-                        break;
-                }
-            }
+        else if (player1.getScore().equals("Avg")) {
+            return "Advantage player1";
+        } else if (player2.getScore().equals("Avg")) {
+            return "Advantage player2";
         }
-        return score;
+        else {
+            return player1.getScore() + "-" + player2.getScore();
+        }
     }
 }
